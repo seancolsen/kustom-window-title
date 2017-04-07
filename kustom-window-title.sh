@@ -1,4 +1,4 @@
-#!/usr/local/bin/fish
+#!/usr/bin/env fish
 
 # this block is so you can use it from the command line with -t and -w
 if test "$argv" != "" -a (math (count $argv)%2 == 0)
