@@ -1,5 +1,7 @@
 #!/usr/bin/env fish
 
+set kde_env true
+
 # this block is so you can use it from the command line with -t and -w
 if test "$argv" != "" -a (math (count $argv)%2 == 0)
     for i in (seq 1 (count $argv))
@@ -19,15 +21,20 @@ end
 
 # get the id of the currently focused window
 if not test $window_id
-    set window_id (xprop -root _NET_ACTIVE_WINDOW | grep -P -o "0x\w+")
+    set window_id (xprop -root _NET_ACTIVE_WINDOW | grep -P -o "0x\w+" | head -1)
 end
 
 # get the title to force on that window
 
 if not test $title_i_want
-    set title_i_want (kdialog --title "entitled" --inputbox "type the title you want and hit enter.
+    if test $kde_env = true
+       set title_i_want (kdialog --title "entitled" --inputbox "type the title you want and hit enter.
 to stop renaming,
 just enter nothing and hit esc")
+    else
+       # for not kde environment
+       set title_i_want (zenity --title="Change Title" --entry --text="Type the title you want and hit enter.\nTo stop renaming, just enter nothing and hit esc")
+    end
 end
 
 # this bit is needed for a kludge that allows window renaming
